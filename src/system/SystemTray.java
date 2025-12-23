@@ -1,5 +1,6 @@
-package shorttext;
+package system;
 
+import ui.ApplicationGUI;
 import java.awt.AWTException;
 import java.awt.Image;
 import java.awt.MenuItem;
@@ -47,7 +48,7 @@ public class SystemTray {
         });
         MenuItem exitItem = new MenuItem("Exit");
         exitItem.addActionListener(e -> {
-            java.awt.SystemTray.getSystemTray().remove(java.awt.SystemTray.getSystemTray().getTrayIcons()[0]);  // Full package reference
+            java.awt.SystemTray.getSystemTray().remove(java.awt.SystemTray.getSystemTray().getTrayIcons()[0]);
             System.exit(0);
         });
 

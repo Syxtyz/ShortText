@@ -1,4 +1,4 @@
-package shorttext;
+package ui;
 
 public class ApplicationGUI extends javax.swing.JFrame {
     public ApplicationGUI() {
