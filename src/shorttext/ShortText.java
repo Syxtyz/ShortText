@@ -3,6 +3,8 @@ package shorttext;
 import system.SystemTray;
 import ui.ApplicationGUI;
 import db.SchemaInitializer;
+import javax.swing.SwingUtilities;
+import ui.SnippetManagerFrame;
 
 public class ShortText {
     public static void main(String[] args) {
@@ -16,7 +18,11 @@ public class ShortText {
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
-        ApplicationGUI window = new ApplicationGUI();
-        new SystemTray(window);
+//        ApplicationGUI window = new ApplicationGUI();
+//        new SystemTray(window);
+        
+        SwingUtilities.invokeLater(() -> {
+            new SnippetManagerFrame().setVisible(true);
+        });
     }
 }

@@ -1,26 +1,73 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package repository;
 
-import java.util.HashMap;
-import java.util.Map;
 import db.DatabaseManager;
-/**
- *
- * @author Admin
- */
+import model.Snippet;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 public class SnippetRepository {
-    public Map<String, String> loadAll() {
-        Map<String, String> map = new HashMap<>();
-        try (var conn = DatabaseManager.getConnection(); var stmt = conn.createStatement(); var rs = stmt.executeQuery("SELECT trigger, content FROM snippets")) {
+
+    public List<Snippet> findAll() {
+        List<Snippet> list = new ArrayList<>();
+
+        try (Connection conn = DatabaseManager.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM snippets")) {
+
             while (rs.next()) {
-                map.put(rs.getString("trigger"), rs.getString("content"));
+                list.add(new Snippet(
+                        rs.getInt("id"),
+                        rs.getString("trigger"),
+                        rs.getString("content"),
+                        rs.getString("description")
+                ));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return map;
+        return list;
+    }
+
+    public void insert(String trigger, String content, String description) {
+        String sql = "INSERT INTO snippets(trigger, content, description) VALUES(?,?,?)";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, trigger);
+            ps.setString(2, content);
+            ps.setString(3, description);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void update(int id, String trigger, String content, String description) {
+        String sql = "UPDATE snippets SET trigger=?, content=?, description=? WHERE id=?";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, trigger);
+            ps.setString(2, content);
+            ps.setString(3, description);
+            ps.setInt(4, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void delete(int id) {
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement ps =
+                     conn.prepareStatement("DELETE FROM snippets WHERE id=?")) {
+
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
